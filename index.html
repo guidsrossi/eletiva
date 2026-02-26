@@ -1,0 +1,621 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Escolha de Eletivas</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1:#f6f8fc;
+      --bg2:#eef2ff;
+      --card:#ffffff;
+      --stroke:#e6eaf2;
+      --text:#101828;
+      --muted:#475467;
+      --muted2:#667085;
+
+      --okbg:#ecfdf3;
+      --okbd:#a6f4c5;
+      --oktx:#027a48;
+
+      --errbg:#fffbfa;
+      --errbd:#fecdca;
+      --errtx:#b42318;
+
+      --focus:#84a8ff;
+      --ring: rgba(74, 114, 255, .18);
+
+      --btn1:#2f6bff;
+      --btn2:#1f52d8;
+      --btnShadow: 0 10px 24px rgba(47,107,255,.20);
+
+      --radius: 18px;
+      --shadow: 0 18px 60px rgba(16,24,40,.10);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      background:
+        radial-gradient(1200px 600px at 15% 10%, rgba(47,107,255,.12), transparent 55%),
+        radial-gradient(900px 500px at 85% 30%, rgba(39, 174, 96, .10), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding: 28px 14px;
+    }
+
+    .wrap{
+      width:min(980px, 100%);
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+    }
+    @media (max-width: 900px){
+      .wrap{ grid-template-columns: 1fr; }
+    }
+
+    .panel{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+
+    .hero{ padding: 22px 22px 0 22px; }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .logo{
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: linear-gradient(180deg, #fff, #f6f8ff);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      flex: 0 0 auto;
+    }
+    .logo img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .title h1{
+      font-size: 22px;
+      margin:0;
+      line-height:1.1;
+      letter-spacing:-0.02em;
+    }
+    .title p{
+      margin:6px 0 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.35;
+    }
+
+    .steps{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      margin: 14px 0 18px 0;
+      padding: 0 22px 18px 22px;
+    }
+
+    .chip{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: #fbfcff;
+      color: var(--muted);
+      font-size: 12px;
+      user-select:none;
+    }
+
+    .chip b{
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(47,107,255,.12);
+      color: var(--text);
+      border: 1px solid rgba(47,107,255,.18);
+      font-size: 12px;
+    }
+
+    .form{
+      padding: 18px 22px 22px 22px;
+      border-top: 1px solid var(--stroke);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 650px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    label{
+      display:block;
+      font-weight: 800;
+      font-size: 12px;
+      margin: 2px 0 8px 2px;
+      color: var(--text);
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    select, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: #ffffff;
+      color: var(--text);
+      outline:none;
+      transition: .15s ease;
+    }
+
+    select:focus, textarea:focus{
+      border-color: var(--focus);
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+
+    select:disabled, textarea:disabled{
+      background: #f5f7fb;
+      color: var(--muted2);
+      cursor:not-allowed;
+    }
+
+    textarea{
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .full{ grid-column: 1 / -1; }
+
+    .hint{
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted2);
+      line-height:1.35;
+    }
+
+    .actions{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      margin-top: 14px;
+      flex-wrap:wrap;
+    }
+
+    button{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 800;
+      letter-spacing: .01em;
+      color: white;
+      background: linear-gradient(180deg, var(--btn1), var(--btn2));
+      box-shadow: var(--btnShadow);
+      transition: transform .08s ease, filter .15s ease, opacity .15s ease;
+    }
+    button:hover{ filter: brightness(1.02); }
+    button:active{ transform: translateY(1px); }
+    button:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      filter: grayscale(.15);
+      box-shadow:none;
+    }
+
+    .msg{
+      margin-top: 14px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: #fbfcff;
+      color: var(--muted);
+      display:none;
+      line-height:1.35;
+    }
+    .msg.ok{
+      display:block;
+      background: var(--okbg);
+      border-color: var(--okbd);
+      color: var(--oktx);
+    }
+    .msg.err{
+      display:block;
+      background: var(--errbg);
+      border-color: var(--errbd);
+      color: var(--errtx);
+    }
+
+    .side{
+      padding: 22px;
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+    }
+    .side h2{
+      margin:0;
+      font-size: 18px;
+      letter-spacing:-0.02em;
+    }
+    .side p{
+      margin:0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.45;
+    }
+    .info{
+      border:1px solid var(--stroke);
+      border-radius: var(--radius);
+      background: #fbfcff;
+      padding: 14px;
+    }
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background: #f2f4f7;
+      border: 1px solid var(--stroke);
+      padding: 2px 8px;
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 12px;
+    }
+
+    .footer{
+      color: var(--muted2);
+      font-size: 12px;
+      text-align:center;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <section class="panel">
+      <div class="hero">
+        <div class="brand">
+          <div class="logo">
+            <img src="./logo-escola.png" alt="Logo da escola" />
+          </div>
+          <div class="title">
+            <h1>Escolha de Eletivas</h1>
+            <p>Selecione sua turma, seu nome e indique suas 3 preferências de eletiva. Apenas 1 envio por aluno.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="chip"><b>1</b> Turma</div>
+        <div class="chip"><b>2</b> Nome</div>
+        <div class="chip"><b>3</b> Preferências</div>
+        <div class="chip"><b>4</b> Justificativa</div>
+      </div>
+
+      <form class="form" id="formEletiva" novalidate>
+        <div class="grid">
+          <div>
+            <label for="turma">Turma</label>
+            <select id="turma" required>
+              <option value="">Carregando...</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="aluno">Aluno</label>
+            <select id="aluno" required disabled>
+              <option value="">Selecione a turma primeiro...</option>
+            </select>
+          </div>
+
+          <div class="full">
+            <label for="op1">1ª opção de eletiva</label>
+            <select id="op1" required disabled></select>
+          </div>
+
+          <div>
+            <label for="op2">2ª opção</label>
+            <select id="op2" required disabled></select>
+          </div>
+
+          <div>
+            <label for="op3">3ª opção</label>
+            <select id="op3" required disabled></select>
+          </div>
+
+          <div class="full">
+            <label for="just">Justificativa da primeira opção</label>
+            <textarea id="just" required minlength="20" disabled placeholder="Explique o motivo (mín. 20 caracteres)..."></textarea>
+            <div class="hint">Mínimo: <span class="kbd">20</span> caracteres.</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="enviar" type="submit" disabled>Enviar escolha</button>
+        </div>
+
+        <div id="msg" class="msg"></div>
+      </form>
+    </section>
+
+    <aside class="panel">
+      <div class="side">
+        <h2>Regras</h2>
+        <div class="info">
+          <p>• É permitido <b>apenas 1 envio por aluno</b>.</p>
+          <p>• As opções de eletiva <b>não podem repetir</b>.</p>
+          <p>• A justificativa precisa ter pelo menos <span class="kbd">20</span> caracteres.</p>
+        </div>
+
+        <h2>Dica</h2>
+        <div class="info">
+          <p>Depois que um aluno envia, o nome dele some do select automaticamente para o próximo aluno votar.</p>
+        </div>
+
+        <div class="footer">© Escola • Formulário de Eletivas</div>
+      </div>
+    </aside>
+  </div>
+
+<script>
+  const API_BASE = "https://script.google.com/macros/s/AKfycbzY59IcbANJLgsgQT1kJRbyGPOUNSp7JUkfGA0AP3ITK0eZZGAwvVHs31ab8yOVDTheUw/exec";
+
+  const elForm = document.getElementById("formEletiva");
+  const elTurma = document.getElementById("turma");
+  const elAluno = document.getElementById("aluno");
+  const elOp1 = document.getElementById("op1");
+  const elOp2 = document.getElementById("op2");
+  const elOp3 = document.getElementById("op3");
+  const elJust = document.getElementById("just");
+  const elEnviar = document.getElementById("enviar");
+  const elMsg = document.getElementById("msg");
+
+  function setMsg(text, ok=true){
+    elMsg.classList.remove("ok","err");
+    elMsg.classList.add(ok ? "ok" : "err");
+    elMsg.textContent = text;
+  }
+  function clearMsg(){
+    elMsg.classList.remove("ok","err");
+    elMsg.textContent = "";
+  }
+
+  async function fetchJSON(url, opts){
+    const res = await fetch(url, opts);
+    return await res.json();
+  }
+
+  function setOptions(selectEl, list, placeholder="Selecione..."){
+    selectEl.innerHTML = "";
+    const ph = document.createElement("option");
+    ph.value = "";
+    ph.textContent = placeholder;
+    selectEl.appendChild(ph);
+
+    for(const item of list){
+      const opt = document.createElement("option");
+      opt.value = item.value;
+      opt.textContent = item.label;
+      selectEl.appendChild(opt);
+    }
+  }
+
+  function enableFields(enabled){
+    for(const el of [elOp1, elOp2, elOp3]) el.disabled = !enabled;
+    elJust.disabled = !enabled;
+    elEnviar.disabled = !enabled;
+  }
+
+  function refreshDropdowns(eletivas){
+    const picks = { op1: elOp1.value, op2: elOp2.value, op3: elOp3.value };
+
+    const excludeFor = (keepKey) =>
+      Object.entries(picks).filter(([k,v]) => k !== keepKey && v).map(([k,v]) => v);
+
+    const buildList = (exclude) => eletivas.filter(e => !exclude.includes(e.value)).map(e => ({value:e.value, label:e.label}));
+
+    const reRender = (el, keepKey) => {
+      const old = el.value;
+      const list = buildList(excludeFor(keepKey));
+      setOptions(el, list, "Selecione...");
+      if(old && list.some(x => x.value === old)) el.value = old;
+    };
+
+    reRender(elOp1, "op1");
+    reRender(elOp2, "op2");
+    reRender(elOp3, "op3");
+  }
+
+  function hasDuplicate(){
+    const vals = [elOp1.value, elOp2.value, elOp3.value].filter(Boolean);
+    return new Set(vals).size !== vals.length;
+  }
+
+  let eletivasCache = [];
+
+  async function loadAlunosDaTurma(turmaId){
+    elAluno.disabled = true;
+    elAluno.innerHTML = `<option value="">Carregando alunos...</option>`;
+
+    const alunos = await fetchJSON(`${API_BASE}?action=alunos&turmaId=${encodeURIComponent(turmaId)}`);
+
+    if (!alunos.length) {
+      elAluno.innerHTML = `<option value="">Nenhum aluno disponível (todos já responderam)</option>`;
+      elAluno.disabled = true;
+      enableFields(false);
+      return;
+    }
+
+    setOptions(elAluno, alunos.map(a => ({ value: a.AlunoID, label: a.Nome })), "Selecione seu nome...");
+    elAluno.disabled = false;
+  }
+
+  function resetParaProximoAluno(){
+    elAluno.value = "";
+    elOp1.value = "";
+    elOp2.value = "";
+    elOp3.value = "";
+    elJust.value = "";
+    enableFields(false);
+    refreshDropdowns(eletivasCache);
+    elAluno.focus();
+  }
+
+  async function init(){
+    clearMsg();
+    try{
+      if(!API_BASE || API_BASE.includes("COLE_AQUI")){
+        setMsg("Configure a URL da API (API_BASE) no código antes de publicar.", false);
+        elTurma.innerHTML = `<option value="">Configurar API_BASE...</option>`;
+        return;
+      }
+
+      const turmas = await fetchJSON(`${API_BASE}?action=turmas`);
+      setOptions(
+        elTurma,
+        turmas.map(t => ({ value: t.TurmaID, label: t.TurmaNome })),
+        "Selecione a turma..."
+      );
+
+      const eletivas = await fetchJSON(`${API_BASE}?action=eletivas`);
+      eletivasCache = eletivas.map(e => ({ value: e.EletivaID, label: e.EletivaNome }));
+
+      setOptions(elOp1, eletivasCache, "Selecione...");
+      setOptions(elOp2, eletivasCache, "Selecione...");
+      setOptions(elOp3, eletivasCache, "Selecione...");
+
+      elAluno.disabled = true;
+      enableFields(false);
+
+    }catch(e){
+      setMsg("Falha ao carregar dados. Verifique a publicação do Apps Script e a URL.", false);
+      elTurma.innerHTML = `<option value="">Erro ao carregar</option>`;
+    }
+  }
+
+  elTurma.addEventListener("change", async () => {
+    clearMsg();
+    const turmaId = elTurma.value;
+
+    elOp1.value = ""; elOp2.value = ""; elOp3.value = "";
+    elJust.value = "";
+    enableFields(false);
+    refreshDropdowns(eletivasCache);
+
+    if(!turmaId){
+      elAluno.disabled = true;
+      elAluno.innerHTML = `<option value="">Selecione a turma primeiro...</option>`;
+      return;
+    }
+
+    await loadAlunosDaTurma(turmaId);
+  });
+
+  elAluno.addEventListener("change", () => {
+    clearMsg();
+    const ok = !!elAluno.value;
+    enableFields(ok);
+
+    elOp1.value = ""; elOp2.value = ""; elOp3.value = "";
+    elJust.value = "";
+
+    refreshDropdowns(eletivasCache);
+  });
+
+  for(const s of [elOp1, elOp2, elOp3]){
+    s.addEventListener("change", () => {
+      refreshDropdowns(eletivasCache);
+      if(hasDuplicate()){
+        setMsg("As opções de eletiva não podem repetir.", false);
+      }else{
+        clearMsg();
+      }
+    });
+  }
+
+  elForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    clearMsg();
+
+    if(!elForm.reportValidity()) return;
+    if(hasDuplicate()) return setMsg("As opções de eletiva não podem repetir.", false);
+
+    const turmaId = elTurma.value;
+
+    const payload = {
+      turmaId: turmaId,
+      turmaNome: elTurma.options[elTurma.selectedIndex]?.textContent || "",
+      alunoId: elAluno.value,
+      alunoNome: elAluno.options[elAluno.selectedIndex]?.textContent || "",
+
+      opcao1: elOp1.value,
+      opcao1_nome: elOp1.options[elOp1.selectedIndex]?.textContent || "",
+      opcao2: elOp2.value,
+      opcao2_nome: elOp2.options[elOp2.selectedIndex]?.textContent || "",
+      opcao3: elOp3.value,
+      opcao3_nome: elOp3.options[elOp3.selectedIndex]?.textContent || "",
+
+      justificativa: elJust.value.trim()
+    };
+
+    try{
+      elEnviar.disabled = true;
+
+      const res = await fetchJSON(API_BASE, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+
+      if(!res.ok){
+        elEnviar.disabled = false;
+        return setMsg(res.error || "Erro ao enviar.", false);
+      }
+
+      setMsg(res.message || "Escolha enviada com sucesso!", true);
+
+      await loadAlunosDaTurma(turmaId);
+      resetParaProximoAluno();
+      elEnviar.disabled = false;
+
+    }catch(e){
+      elEnviar.disabled = false;
+      setMsg("Falha ao enviar. Verifique sua internet e a publicação do Apps Script.", false);
+    }
+  });
+
+  init();
+</script>
+</body>
+</html>
